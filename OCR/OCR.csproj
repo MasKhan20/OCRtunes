@@ -93,6 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\FolderExtention.cs" />
     <Compile Include="Services\Converter.cs" />
+    <Compile Include="Models\Playlist.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

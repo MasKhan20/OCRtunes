@@ -12,7 +12,8 @@ using static OCR.Properties.Settings;
 using OCR.Services;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
-using TagLib.Id3v2;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace OCR.ViewModels
 {
@@ -25,14 +26,19 @@ namespace OCR.ViewModels
 
         public ICommand PlayListSelectionCommand => new RelayCommand(PlayListSelection_Command);
 
+        public ICommand PlayAudioCommand => new RelayCommand(PlayAudio_Command);
+        public ICommand CreatePlayListCommand => new RelayCommand(CreatePlayList_Command);
+
         /// <summary>
         /// SongList property bound to ListView in MainWindow. 
         /// </summary>
-        private List<Song> _songList;
-        public List<Song> SongList
+        public ObservableCollection<Song> SongList { get; set; }
+
+        private Song _selecteSong;
+        public Song SelectedSong
         {
-            get { return _songList; }
-            set { Set(() => SongList, ref _songList, value); }
+            get { return _selecteSong; }
+            set { Set(() => SelectedSong, ref _selecteSong, value); }
         }
 
         /// <summary>
@@ -43,6 +49,34 @@ namespace OCR.ViewModels
             UpdateListView();
 
             Default.PropertyChanged += Default_PropertyChanged;
+
+            /* Get Play-lists */
+            string listsPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OCRtunes",  "Playlists");
+            if (!Directory.Exists(listsPath))
+            {
+                Directory.CreateDirectory(listsPath);
+            }
+
+            string[] playlists = Directory.GetDirectories(listsPath);
+
+            foreach (var playlist in playlists)
+            {
+                List<Song> songs = new List<Song>();
+                string[] songsInPath = Directory.GetFiles(playlist);
+                foreach (var song in songsInPath)
+                {
+                    songs.Add(NewSong(song));
+                }
+
+                Playlist newPlaylist = new Playlist()
+                {
+                    Title = playlist.Split(Path.DirectorySeparatorChar).Last(),
+                    Songs = songs
+                };
+
+                Playlist.Playlists.Add(newPlaylist);
+            }
         }
 
         /// <summary>
@@ -50,7 +84,7 @@ namespace OCR.ViewModels
         /// </summary>
         private void UpdateListView()
         {
-            SongList = new List<Song>();
+            SongList = new ObservableCollection<Song>();
 
             string songDir = Default.SongDir;
             if (!Directory.Exists(songDir))
@@ -58,31 +92,31 @@ namespace OCR.ViewModels
                 Directory.CreateDirectory(songDir);
             }
 
-            List<string> songFiles = Directory.GetFiles(songDir, "*.mp3").ToList<string>();
-            songFiles.Sort();
+            var songFiles = Directory.GetFiles(songDir);
+            //songFiles.Sort();
 
             foreach (var songFile in songFiles)
             {
-                TagLib.File tagFile = TagLib.File.Create(songFile);
-
-                TagLib.Id3v2.Tag tags = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2);
-                PrivateFrame pFrame = PrivateFrame.Get(tags, "Artist", true);
-                pFrame.PrivateData = Encoding.Unicode.GetBytes("Mishary Rashid Alafasy");
-                tagFile.Save();
-                //tagFile.Tag.Performers.Append("Mishary Rashid Alafasy");
-                //tagFile.Save();
-
-                SongList.Add(new Song()
-                {
-                    Title = Path.GetFileNameWithoutExtension(tagFile.Name ?? songFile),
-                    Artist = tagFile.Tag.Performers.Length != 0 ? tagFile.Tag.Performers[0] : "---",
-                    Genre = tagFile.Tag.Genres.Length != 0 ? tagFile.Tag.Genres[0] : "---",
-                    Length = Converter.ConvertTime(tagFile.Properties.Duration.TotalSeconds),
-                    Size = Converter.ConvertSize((float)new FileInfo(songFile).Length)
-                });
-
-                tagFile.Dispose();
+                SongList.Add(NewSong(songFile));
             }
+        }
+
+        private Song NewSong(string filepath)
+        {
+            TagLib.File tagFile = TagLib.File.Create(filepath);
+
+            var newSong = new Song()
+            {
+                FullPath = filepath,
+                Title = Path.GetFileNameWithoutExtension(tagFile.Name ?? filepath),
+                Artist = tagFile.Tag.Performers.Length != 0 ? tagFile.Tag.Performers[0] : "---",
+                Genre = tagFile.Tag.Genres.Length != 0 ? tagFile.Tag.Genres[0] : "---",
+                Length = Converter.ConvertTime(tagFile.Properties.Duration.TotalSeconds),
+                Size = Converter.ConvertSize((float)new FileInfo(filepath).Length)
+            };
+
+            tagFile.Dispose();
+            return newSong;
         }
 
         /// <summary>
@@ -96,10 +130,22 @@ namespace OCR.ViewModels
             Default.Save();
         }
 
+        private void PlayAudio_Command()
+        {
+            //MessageBox.Show("Playing " + SelectedSong.FullPath);
+            Process.Start(SelectedSong.FullPath);
+        }
 
-        private void PlayListSelection_Command()
+        private void CreatePlayList_Command()
         {
 
+        }
+
+        /// <summary>
+        /// Redundant void
+        /// </summary>
+        private void PlayListSelection_Command()
+        {
         }
 
         private void ChangeSongDir_Command()

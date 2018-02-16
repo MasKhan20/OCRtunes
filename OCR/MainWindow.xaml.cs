@@ -42,5 +42,10 @@ namespace OCR
         {
             this.Close();
         }
+
+        private void ListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //MessageBox.Show(lstView.SelectedItem.ToString());
+        }
     }
 }

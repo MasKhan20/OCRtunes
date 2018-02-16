@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OCR"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,12 +21,23 @@
         </Menu>
         <TabControl Grid.Row="1">
             <TabItem Header="All Songs">
-                <ListView ItemsSource="{Binding SongList}">
+                <ListView 
+                    Name="lstView"
+                    ItemsSource="{Binding SongList}" 
+                    SelectedItem="{Binding SelectedSong}"
+                    SelectionMode="Extended"
+                    PreviewMouseDoubleClick="ListView_PreviewMouseDoubleClick">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         </Style>
                     </ListView.ItemContainerStyle>
+                    <ListView.ContextMenu>
+                        <ContextMenu StaysOpen="True">
+                            <MenuItem Header="Play Audio" Command="{Binding PlayAudioCommand}"/>
+                            <MenuItem Header="Create Play-list" Command="{Binding CreatePlayListCommand}"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Title" Width="225">
