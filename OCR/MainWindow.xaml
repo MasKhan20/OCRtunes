@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OCR"
-        xmlns:self="clr-namespace:OCR.Models"
+        xmlns:types="clr-namespace:OCR.Models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="525">
+        Title="OCRtunes" Height="400" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -81,14 +81,14 @@
                 </ListView>
             </TabItem>
             <TabItem Header="Playlists">
-                <TreeView ItemsSource="{Binding Playlists}">
+                <TreeView ItemsSource="{Binding PlayLists}">
                     <TreeView.Resources>
-                      <HierarchicalDataTemplate DataType="{x:Type self:Playlist}" ItemsSource="{Binding Playists}">
-                            <TextBlock Text="{Binding Name}"/>
+                        <HierarchicalDataTemplate DataType="{x:Type types:Playlist}" ItemsSource="{Binding PlayLists}">
+                            <TextBlock Text="{Binding Path=Name}"/>
                         </HierarchicalDataTemplate>
-                        <DataTemplate DataType="{x:Type self:Song}">
-                            <TextBlock Text="{Binding Title}"/>
-                        </DataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type types:Song}">
+                            <TextBlock Text="{Binding Path=Title}"/>
+                        </HierarchicalDataTemplate>
                     </TreeView.Resources>
                 </TreeView>
             </TabItem>

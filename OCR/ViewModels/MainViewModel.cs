@@ -30,12 +30,13 @@ namespace OCR.ViewModels
         /// </summary>
         public ObservableCollection<Song> SongList { get; set; }
 
-        private List<Playlist> _playlists;
-        public List<Playlist> PlayLists
-        {
-            get { return _playlists; }
-            set { Set(() => PlayLists, ref _playlists, value); }
-        }
+        public ObservableCollection<Playlist> PlayLists { get; set; }
+        //private List<Playlist> _playlists;
+        //public List<Playlist> PlayLists
+        //{
+        //    get { return _playlists; }
+        //    set { Set(() => PlayLists, ref _playlists, value); }
+        //}
 
         private Song _selecteSong;
         public Song SelectedSong
@@ -65,7 +66,7 @@ namespace OCR.ViewModels
 
             foreach (var playlist in playlists)
             {
-                List<Song> songs = new List<Song>();
+                var songs = new List<Song>();
                 string[] songsInPath = Directory.GetFiles(playlist);
                 foreach (var song in songsInPath)
                 {

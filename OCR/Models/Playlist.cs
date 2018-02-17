@@ -13,7 +13,7 @@ namespace OCR.Models
         public string Name { get; set; }
         public List<Song> Songs { get; set; }
 
-        public static List<Playlist> Playlists { get; set; } = new List<Playlist>();
-        //public static ObservableCollection<Playlist> Playlists { get; set; } = new ObservableCollection<Playlist>();
+        //public static List<Playlist> Playlists { get; set; } = new List<Playlist>();
+        public static ObservableCollection<Playlist> Playlists { get; set; } = new ObservableCollection<Playlist>();
     }
 }
