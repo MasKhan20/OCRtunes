@@ -4,10 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TagLib;
-using System.Windows;
 using static OCR.Properties.Settings;
 using OCR.Services;
 using System.Windows.Input;
@@ -33,6 +29,13 @@ namespace OCR.ViewModels
         /// SongList property bound to ListView in MainWindow. 
         /// </summary>
         public ObservableCollection<Song> SongList { get; set; }
+
+        private List<Playlist> _playlists;
+        public List<Playlist> PlayLists
+        {
+            get { return _playlists; }
+            set { Set(() => PlayLists, ref _playlists, value); }
+        }
 
         private Song _selecteSong;
         public Song SelectedSong
@@ -71,12 +74,14 @@ namespace OCR.ViewModels
 
                 Playlist newPlaylist = new Playlist()
                 {
-                    Title = playlist.Split(Path.DirectorySeparatorChar).Last(),
+                    Name = playlist.Split(Path.DirectorySeparatorChar).Last(),
                     Songs = songs
                 };
 
                 Playlist.Playlists.Add(newPlaylist);
             }
+
+            PlayLists = Playlist.Playlists;
         }
 
         /// <summary>

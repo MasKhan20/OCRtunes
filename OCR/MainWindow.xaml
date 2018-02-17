@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OCR"
+        xmlns:self="clr-namespace:OCR.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="525">
     <Grid>
@@ -79,16 +80,17 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem Header="Create PlayList">
-                <StackPanel Margin="5">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <Label Content="Select desired songs for new play-list, then confirm: "/>
-                        <Button Content="Create Play-list" Command="{Binding CreatePlayListComand}"/>
-                    </StackPanel>
-                    <StackPanel Margin="5">
-                        
-                    </StackPanel>
-                </StackPanel>
+            <TabItem Header="Playlists">
+                <TreeView ItemsSource="{Binding Playlists}">
+                    <TreeView.Resources>
+                      <HierarchicalDataTemplate DataType="{x:Type self:Playlist}" ItemsSource="{Binding Playists}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type self:Song}">
+                            <TextBlock Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
             </TabItem>
             <TabItem Header="All PlayLists">
                 
