@@ -23,7 +23,7 @@ namespace OCR.ViewModels
         public ICommand PlayListSelectionCommand => new RelayCommand(PlayListSelection_Command);
 
         public ICommand PlayAudioCommand => new RelayCommand(PlayAudio_Command);
-        public ICommand CreatePlayListCommand => new RelayCommand(CreatePlayList_Command);
+        public ICommand AddPlayListCommand => new RelayCommand(AddPlayList_Command);
 
         /// <summary>
         /// SongList property bound to ListView in MainWindow. 
@@ -66,7 +66,7 @@ namespace OCR.ViewModels
 
             foreach (var playlist in playlists)
             {
-                var songs = new List<Song>();
+                var songs = new ObservableCollection<Song>();
                 string[] songsInPath = Directory.GetFiles(playlist);
                 foreach (var song in songsInPath)
                 {
@@ -138,11 +138,13 @@ namespace OCR.ViewModels
 
         private void PlayAudio_Command()
         {
-            //MessageBox.Show("Playing " + SelectedSong.FullPath);
+            if (SelectedSong?.FullPath == null)
+                return;
+
             Process.Start(SelectedSong.FullPath);
         }
 
-        private void CreatePlayList_Command()
+        private void AddPlayList_Command()
         {
 
         }

@@ -32,10 +32,6 @@ namespace OCR
             InitializeComponent();
             var viewmodel = new MainViewModel();
             DataContext = viewmodel;
-
-            this.SizeToContent = SizeToContent.Height;
-            this.SizeToContent = SizeToContent.Width;
-
         }
 
         private void CloseMenu_Click(object sender, RoutedEventArgs e)

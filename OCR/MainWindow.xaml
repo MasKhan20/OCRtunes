@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OCR"
         xmlns:types="clr-namespace:OCR.Models"
         mc:Ignorable="d"
-        Title="OCRtunes" Height="400" Width="525">
+        Title="OCRtunes" Height="400" Width="674">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -36,7 +36,7 @@
                     <ListView.ContextMenu>
                         <ContextMenu StaysOpen="True">
                             <MenuItem Header="Play Audio" Command="{Binding PlayAudioCommand}"/>
-                            <MenuItem Header="Create Play-list" Command="{Binding CreatePlayListCommand}"/>
+                            <MenuItem Name="playListMenu" Header="Add to Play-list"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                     <ListView.View>
@@ -83,11 +83,11 @@
             <TabItem Header="Playlists">
                 <TreeView ItemsSource="{Binding PlayLists}">
                     <TreeView.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type types:Playlist}" ItemsSource="{Binding PlayLists}">
-                            <TextBlock Text="{Binding Path=Name}"/>
+                        <HierarchicalDataTemplate DataType="{x:Type types:Playlist}" ItemsSource="{Binding Songs}">
+                            <TextBlock Text="{Binding Name}"/>
                         </HierarchicalDataTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type types:Song}">
-                            <TextBlock Text="{Binding Path=Title}"/>
+                            <TextBlock Text="{Binding Title}"/>
                         </HierarchicalDataTemplate>
                     </TreeView.Resources>
                 </TreeView>

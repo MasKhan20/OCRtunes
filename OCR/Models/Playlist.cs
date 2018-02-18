@@ -10,8 +10,13 @@ namespace OCR.Models
 {
     public class Playlist
     {
+        public Playlist()
+        {
+            this.Songs = new ObservableCollection<Song>();
+        }
+
         public string Name { get; set; }
-        public List<Song> Songs { get; set; }
+        public ObservableCollection<Song> Songs { get; set; }
 
         //public static List<Playlist> Playlists { get; set; } = new List<Playlist>();
         public static ObservableCollection<Playlist> Playlists { get; set; } = new ObservableCollection<Playlist>();
