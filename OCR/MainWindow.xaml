@@ -92,7 +92,7 @@
                     </TreeView.Resources>
                 </TreeView>
             </TabItem>
-            <TabItem Header="All PlayLists">
+            <TabItem Header="About">
                 
             </TabItem>
         </TabControl>
