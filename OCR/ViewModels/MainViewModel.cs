@@ -98,7 +98,7 @@ namespace OCR.ViewModels
                 Directory.CreateDirectory(songDir);
             }
 
-            var songFiles = Directory.GetFiles(songDir);
+            var songFiles = Directory.GetFiles(songDir, "*.mp3");
             //songFiles.Sort();
 
             foreach (var songFile in songFiles)
